@@ -163,7 +163,7 @@ class EncryptedFieldMixin(object):
         return self.to_python(value)
 
     def to_python(self, value):
-        if value is None or not isinstance(value, types.StringTypes):
+        if value is None or not isinstance(value, str):
             return value
 
         if self.prefix and value.startswith(self.prefix):
@@ -171,7 +171,7 @@ class EncryptedFieldMixin(object):
 
         try:
             value = self.crypter().decrypt(value)
-            value = value.decode('unicode_escape')
+            # value = value.decode('unicode_escape')
         except keyczar.errors.KeyczarError:
             pass
         except UnicodeEncodeError:
@@ -185,8 +185,8 @@ class EncryptedFieldMixin(object):
         if value is None or value == '' or self.decrypt_only:
             return value
 
-        if isinstance(value, types.StringTypes):
-            value = value.encode('unicode_escape')
+        if isinstance(value, str):
+            # value = value.encode('unicode_escape')
             value = value.encode('ascii')
         else:
             value = str(value)
